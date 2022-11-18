@@ -13,9 +13,9 @@
         --color-secondary-main: 250 204 11;
         --color-secondary-light: 252 225 115;
 
-        --color-info: 112 200 255
-        --color-success: 144 255 119
-        --color-error: 255 100 100
-        --color-warning: 238 139 52
+        --color-info: 112 200 255;
+        --color-success: 144 255 119;
+        --color-error: 255 100 100;
+        --color-warning: 238 139 52;
     }
 }
