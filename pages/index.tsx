@@ -1,6 +1,9 @@
+import { useInfinitePokemonList } from '@/src/queries/pokedex';
 import clsx from 'clsx';
 
 export default function HomePage() {
+    const infinitePokemonList = useInfinitePokemonList();
+
     return (
         <div
             className={clsx(
@@ -13,6 +16,20 @@ export default function HomePage() {
             )}
         >
             WIP...
+            <button
+                type="button"
+                disabled={!infinitePokemonList.hasNextPage}
+                onClick={() => infinitePokemonList.fetchNextPage()}
+            >
+                Next
+            </button>
+            <button
+                type="button"
+                disabled={!infinitePokemonList.hasPreviousPage}
+                onClick={() => infinitePokemonList.fetchPreviousPage()}
+            >
+                Previous
+            </button>
             <div
                 className={clsx(
                     'rounded-full',
