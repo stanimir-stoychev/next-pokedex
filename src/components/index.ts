@@ -1,3 +1,5 @@
+'use client';
+
 export * from './Pokeball';
 export * from './PokemonCard';
 export * from './PokemonStats';
