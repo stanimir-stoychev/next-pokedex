@@ -51,12 +51,18 @@ export const useInfinitePokemonList = <TData = NamedAPIResourceList>(options?: I
         },
     });
 
-type PokemonQueryOptions<TData = Pokemon | Pokemon[]> = UseQueryOptions<unknown, unknown, TData, any[]>;
+type PokemonQueryOptions<TData = Pokemon> = UseQueryOptions<unknown, unknown, TData, any[]>;
 
-export const usePokemonQuery = <TData = Pokemon | Pokemon[]>(
-    apiResource: NamedAPIResource,
-    options?: PokemonQueryOptions<TData>,
-) => useQuery(queryKeys['pokemon-query'](apiResource), () => Pokedex.getPokemonByName(apiResource.name), options);
+export const usePokemonQuery = <TData = Pokemon>(apiResource: NamedAPIResource, options?: PokemonQueryOptions<TData>) =>
+    useQuery(
+        queryKeys['pokemon-query'](apiResource),
+        async () => {
+            const res = await Pokedex.getPokemonByName(apiResource.name);
+            const pokemon = Array.isArray(res) ? res[0] : res;
+            return pokemon;
+        },
+        options,
+    );
 
 type PokemonStatsQueryOptions<TData = Stat[]> = UseQueryOptions<
     unknown,
