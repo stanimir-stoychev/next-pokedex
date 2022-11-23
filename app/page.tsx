@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
-export default function HomePage() {
+export default async function HomePage() {
+    const test = await new Promise((resolve) => setTimeout(resolve, 1500));
     return (
         <div className={clsx('container', 'm-auto')}>
             <ul

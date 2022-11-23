@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { PokemonAppViewProvider } from '@/src/hoc';
 import '@/styles/globals.css';
 
@@ -11,7 +12,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <PokemonAppViewProvider>{children}</PokemonAppViewProvider>
+                <PokemonAppViewProvider>
+                    <div className={clsx('container', 'm-auto')}>{children}</div>
+                </PokemonAppViewProvider>
             </body>
         </html>
     );
