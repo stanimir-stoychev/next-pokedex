@@ -18,6 +18,8 @@ import { faSpaceAwesome, faUsps } from '@fortawesome/free-brands-svg-icons';
 
 import { NamedAPIResource, Pokemon } from '@/src/lib';
 import { usePokemonQuery, useStatsQuery } from '@/src/queries/pokedex';
+import { PokemonStats } from './PokemonStats';
+import { PokemonTypes } from './PokemonTypes';
 
 export interface PokemonCardProps
     extends Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, 'className'> {
@@ -75,6 +77,11 @@ function Skeleton({ className, ...props }: Omit<PokemonCardProps, 'apiResource'>
                     <div key={index} className={clsx('h-6', 'bg-slate-700', 'dark:bg-slate-500', 'rounded', 'w-12')} />
                 ))}
             </div>
+            <div className={clsx('grid', 'gap-2', 'grid-cols-3', 'xl:grid-cols-4', 'justify-items-center')}>
+                {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className={clsx('h-6', 'bg-slate-700', 'dark:bg-slate-500', 'rounded', 'w-12')} />
+                ))}
+            </div>
         </div>
     );
 }
@@ -85,7 +92,7 @@ export function PokemonCard({ apiResource, className, ...rest }: PokemonCardProp
 
     if (!pokemon.data) return null;
 
-    const [data] = Array.isArray(pokemon.data) ? pokemon.data : [pokemon.data];
+    const { data } = pokemon;
     const pokemonUrl = `/pokemon/${apiResource.name}`;
 
     return (
@@ -101,12 +108,11 @@ export function PokemonCard({ apiResource, className, ...rest }: PokemonCardProp
                 'shadow-md',
                 'rounded',
                 'w-full',
+                'space-y-2',
+                'pb-2',
             )}
         >
-            <NextLink
-                href={pokemonUrl}
-                className={clsx('flex', 'justify-center', 'space-x-1', 'p-1', 'relative', 'h-48')}
-            >
+            <NextLink href={pokemonUrl} className={clsx('flex', 'justify-center', 'p-1', 'relative', 'h-48')}>
                 {data.sprites.other['official-artwork'].front_default && (
                     <NextImg
                         className={clsx('hover:scale-125', 'transition', 'ease-in-out')}
@@ -119,32 +125,26 @@ export function PokemonCard({ apiResource, className, ...rest }: PokemonCardProp
             </NextLink>
             <h5
                 className={clsx(
-                    'px-5',
+                    'mx-5',
                     'capitalize',
                     'text-gray-900',
                     'font-bold',
                     'text-2xl',
                     'tracking-tight',
-                    'mb-2',
                     'dark:text-white',
                 )}
             >
                 {data.name}
             </h5>
-
-            <ul className={clsx('grid', 'gap-2', 'grid-cols-3', 'xl:grid-cols-4', 'justify-items-center', 'p-5')}>
-                <li>
-                    <Stat stat={{ base_stat: data.height, stat: { name: 'height', url: '' }, effort: 0 }} />
-                </li>
-                <li>
-                    <Stat stat={{ base_stat: data.weight, stat: { name: 'weight', url: '' }, effort: 0 }} />
-                </li>
-                {data.stats.map((stat) => (
-                    <li key={stat.stat.name}>
-                        <Stat stat={stat} />
-                    </li>
-                ))}
-            </ul>
+            <PokemonStats
+                className={['mx-5']}
+                stats={[
+                    { base_stat: data.height, stat: { name: 'height', url: '' }, effort: 0 },
+                    { base_stat: data.weight, stat: { name: 'weight', url: '' }, effort: 0 },
+                    ...data.stats,
+                ]}
+            />
+            <PokemonTypes className={['mx-5']} types={pokemon.data?.types ?? []} />
         </div>
     );
 }
